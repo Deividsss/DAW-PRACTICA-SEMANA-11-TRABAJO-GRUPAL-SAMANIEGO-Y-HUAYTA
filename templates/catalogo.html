@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Catálogo de productos · Huayta y Samaniego{% endblock %}
+
+{% block content %}
+<div class="cabecera">
+    <h1>Catálogo de productos</h1>
+    <p class="sub">
+        {{ productos|length }} producto{{ productos|length|pluralize }}
+        {% if categoria_activa %}en <strong>{{ categoria_activa|title }}</strong>{% endif %}
+        {% if q %}que coinciden con &ldquo;{{ q }}&rdquo;{% endif %}
+    </p>
+</div>
+
+<form class="filtros" method="get" action="{% url 'catalogo' %}">
+    <label class="campo">
+        <span>Buscar</span>
+        <input type="search" name="q" value="{{ q }}" placeholder="Ej: Logitech">
+    </label>
+    <label class="campo">
+        <span>Categoría</span>
+        <select name="categoria">
+            <option value="">Todas</option>
+            {% for c in categorias %}
+            <option value="{{ c }}" {% if c == categoria_activa %}selected{% endif %}>{{ c|title }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label class="check">
+        <input type="checkbox" name="agotados" value="1" {% if ver_agotados %}checked{% endif %}>
+        <span>Mostrar agotados</span>
+    </label>
+    <div class="filtros-acc">
+        <button class="btn btn-primario" type="submit">Aplicar</button>
+        <a class="btn btn-borde" href="{% url 'catalogo' %}">Limpiar</a>
+    </div>
+</form>
+
+<div class="grid">
+    {% for producto in productos %}
+    <article class="card cat-{{ producto.categoria|slugify }}{% if producto.stock == 0 %} agotado{% endif %}">
+        <div class="card-visual" aria-hidden="true">{{ producto.icono }}</div>
+        <div class="card-cuerpo">
+            <span class="etiqueta">{{ producto.categoria|title }}</span>
+            <h3>{{ producto.nombre|title }}</h3>
+            <p class="precio"><small>S/</small> {{ producto.precio|floatformat:"2u"|intcomma:False }}</p>
+
+            <div class="stock">
+                <div class="stock-barra" role="presentation">
+                    <span style="width: {{ producto.nivel_stock }}%"></span>
+                </div>
+                {% if producto.stock == 0 %}
+                    <p class="stock-txt txt-agotado">Agotado</p>
+                {% elif producto.stock <= 5 %}
+                    <p class="stock-txt txt-poco">Últimas {{ producto.stock }} unidad{{ producto.stock|pluralize:"es" }}</p>
+                {% else %}
+                    <p class="stock-txt txt-ok">{{ producto.stock }} en stock</p>
+                {% endif %}
+            </div>
+            <p class="fecha">Agregado el {{ producto.creado_en|date:"d/m/Y" }}</p>
+        </div>
+    </article>
+    {% empty %}
+    <div class="vacio">
+        <h3>No encontramos productos con esos filtros</h3>
+        <p>Prueba con otra categoría, cambia la búsqueda o <a href="{% url 'catalogo' %}">limpia los filtros</a>.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Huayta y Samaniego{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'catalogo/css/estilos.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap bar">
+            <a class="brand" href="{% url 'home' %}">
+                <span class="brand-mark" aria-hidden="true">SH</span>
+                <span>Samaniego y <strong>Huayta</strong></span>
+            </a>
+            <nav aria-label="Principal">
+                <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="activo" aria-current="page"{% endif %}>Inicio</a>
+                <a href="{% url 'catalogo' %}" {% if request.resolver_match.url_name == 'catalogo' %}class="activo" aria-current="page"{% endif %}>Catálogo</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="wrap">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <span>&copy; 2026 IS093A &middot; Desarrollo de Aplicaciones Web</span>
+            <span>Universidad Nacional del Centro del Perú &middot; Django MTV</span>
+        </div>
+    </footer>
+</body>
+</html>

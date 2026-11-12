@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio · Huayta y Samaniego{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-texto">
+        <h1>Tecnología para tu laboratorio, a un clic.</h1>
+        <p class="lead">Consulta precios, categorías y disponibilidad de laptops, smartphones, audio y accesorios en un solo catálogo.</p>
+        <div class="acciones">
+            <a class="btn btn-primario" href="{% url 'catalogo' %}">Ver catálogo</a>
+            <a class="btn btn-borde" href="{% url 'catalogo' %}?agotados=1">Incluir agotados</a>
+        </div>
+    </div>
+
+    <aside class="ficha" aria-label="Resumen del catálogo">
+        {% if error %}
+            <p class="aviso aviso-error">{{ error }}</p>
+        {% else %}
+            <dl>
+                <div><dt>Productos registrados</dt><dd>{{ total }}</dd></div>
+                <div><dt>Con stock disponible</dt><dd>{{ disponibles }}</dd></div>
+                <div><dt>Categorías</dt><dd>{{ categorias|length }}</dd></div>
+            </dl>
+        {% endif %}
+    </aside>
+</section>
+
+{% if categorias %}
+<section class="bloque">
+    <h2>Explora por categoría</h2>
+    <ul class="chips">
+        {% for c in categorias %}
+        <li>
+            <a href="{% url 'catalogo' %}?categoria={{ c.categoria|urlencode }}">
+                {{ c.categoria|title }}
+                <span class="chip-n">{{ c.cantidad }}</span>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% elif not error %}
+<p class="aviso">Aún no hay productos. Ejecuta <code>python manage.py cargar_productos</code>.</p>
+{% endif %}
+{% endblock %}
