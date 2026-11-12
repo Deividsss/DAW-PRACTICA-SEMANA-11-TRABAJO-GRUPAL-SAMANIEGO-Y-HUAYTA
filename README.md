@@ -8,8 +8,8 @@
 
 | Integrante | Roles asumidos |
 |------------|----------------|
-| Samaniego Quispe Deivid Willian | Arquitecto Django · Ingeniero de Plantillas |
-| Huayta Hinojosa Henry Hans | Desarrollador de Vistas · QA & ORM Validator |
+| Samaniego Quispe Deivid Willian | Arquitecto Django |
+| Huayta Hinojosa Henry Hans | Desarrollador de Vistas |
 
 ## Descripción
 
